@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 project(KhatServer VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -14,12 +15,13 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Concurrent)
 
 set(PROJECT_SOURCES
         main.cpp
-        Source/TcpServer.cpp
-        Source/TcpServer.h
+        Source/TcpServer/TcpServer.cpp
+        Source/TcpServer/TcpServer.h
         )
 
 add_executable(KhatServer ${PROJECT_SOURCES})
 
+target_include_directories(KhatServer PRIVATE "../SharedFiles")
 target_link_libraries(KhatServer Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent)
 
 install(TARGETS KhatServer

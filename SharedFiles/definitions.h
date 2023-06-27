@@ -1,0 +1,6 @@
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
+
+#define SERVER_DEFAULT_PORT 9070
+
+#endif //DEFINITIONS_H
