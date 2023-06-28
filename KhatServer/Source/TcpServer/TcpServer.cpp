@@ -42,7 +42,7 @@ void TcpServer::newPendingConnection() {
     connect(socket, &QTcpSocket::disconnected, [this, uuid] { socketDisconnected(uuid); });
     connect(socket, &QTcpSocket::readyRead, [this, uuid] { socketSentMessage(uuid); });
     qInfo("Client was assigned the UUID of %s and added to the client list.", qUtf8Printable(uuid.toString()));
-    qInfo("Peer Info:\n  Address: %s\n  Port: %d\n  Name: %s", qUtf8Printable(socket->peerAddress().toString()), socket->peerPort(), qUtf8Printable(socket->peerName()));
+    qInfo("Peer Info:\n  Address: %s\n  Port: %d", qUtf8Printable(socket->peerAddress().toString()), socket->peerPort());
 }
 
 void TcpServer::socketDisconnected(const QUuid &uuid) {
