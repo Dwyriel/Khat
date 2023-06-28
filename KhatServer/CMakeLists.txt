@@ -16,8 +16,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Concurrent)
 set(PROJECT_SOURCES
         main.cpp
         Source/TcpServer/TcpServer.cpp
-        Source/TcpServer/TcpServer.h
-        )
+        Source/TcpServer/TcpServer.h)
 
 add_executable(KhatServer ${PROJECT_SOURCES})
 

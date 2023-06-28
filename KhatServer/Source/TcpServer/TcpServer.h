@@ -1,13 +1,14 @@
 #ifndef KHATSERVER_TCPSERVER_H
 #define KHATSERVER_TCPSERVER_H
 
+#include "definitions.h"
+
 #include <QtLogging>
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QList>
-
-#include "definitions.h"
+#include <QUuid>
+#include <QMap>
 
 class TcpServer : public QObject {
 Q_OBJECT
@@ -19,9 +20,19 @@ public:
 
 private:
     QTcpServer *qTcpServer;
-    QList<QTcpSocket*> sockets; //will be changed later
+    QMap<QUuid, QTcpSocket *> sockets;
 
     void connectSignals();
+
+private slots:
+
+    void ErrorOccurredOnNewConnection(QAbstractSocket::SocketError socketError);
+
+    void newPendingConnection();
+
+    void socketDisconnected(const QUuid &uuid);
+
+    void socketSentMessage(const QUuid &uuid);
 };
 
 #endif //KHATSERVER_TCPSERVER_H
