@@ -9,11 +9,10 @@ TcpServer::TcpServer(QObject *parent, quint16 port) : QObject(parent), qTcpServe
 TcpServer::~TcpServer() {
     qInfo("Notifying Clients...");
     while (!sockets.empty()) {
-        TcpClient *tcpClient = sockets.last();
+        auto *tcpClient = sockets.take(sockets.lastKey());
         tcpClient->disconnect();
         tcpClient->close();
         tcpClient->deleteLater();
-        sockets.removeLast();
     }
     qInfo("Done");
     qInfo("Closing Server...");
@@ -43,11 +42,11 @@ void TcpServer::newPendingConnection() {
     connect(socket, &QTcpSocket::disconnected, [this, uuid] { socketDisconnected(uuid); });
     connect(socket, &QTcpSocket::readyRead, [this, uuid] { socketSentMessage(uuid); });
     qInfo("Client was assigned the UUID of %s and added to the client list.", qUtf8Printable(uuid.toString()));
-    qInfo("Peer Info:\nAddress: %s\nPort: %d\nName: %s", qUtf8Printable(socket->peerAddress().toString()), socket->peerPort(), qUtf8Printable(socket->peerName()));
+    qInfo("Peer Info:\n  Address: %s\n  Port: %d\n  Name: %s", qUtf8Printable(socket->peerAddress().toString()), socket->peerPort(), qUtf8Printable(socket->peerName()));
 }
 
 void TcpServer::socketDisconnected(const QUuid &uuid) {
-    if(!sockets.contains(uuid))
+    if (!sockets.contains(uuid))
         return;
     sockets.value(uuid)->disconnect();
     sockets.remove(uuid);
