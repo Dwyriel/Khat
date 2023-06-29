@@ -6,6 +6,11 @@
 #include <QObject>
 #include <csignal>
 
+const QList<int> closeSignals = {SIGHUP, SIGINT, SIGQUIT, SIGABRT, SIGTERM};
+const QList<int> errorSignals = {SIGILL, SIGBUS, SIGFPE, SIGSEGV};
+const QList<int> alarmSignals = {SIGALRM, SIGVTALRM, SIGPROF};
+const QList<int> ignoreSignals = {SIGUSR1, SIGUSR2, SIGPIPE};
+
 class SignalHandler : public QObject {
 Q_OBJECT
 
@@ -17,7 +22,11 @@ private:
 
     SignalHandler();
 
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_WIN
+
+    static  void AssignSignalHandler(const QList<int> &sysSignals, void (*action)(int));
+
+#else
 
     static void InitializeAndAssignHandler(struct sigaction *handler, const QList<int> &sysSignals, void (*action)(int), struct sigaction *oldHandler);
 

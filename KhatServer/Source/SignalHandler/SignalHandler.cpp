@@ -7,14 +7,11 @@ SignalHandler *SignalHandler::instance() {
 SignalHandler *SignalHandler::signalHandler = new SignalHandler();
 
 SignalHandler::SignalHandler() {
-    const QList<int> closeSignals = {SIGHUP, SIGINT, SIGQUIT, SIGABRT, SIGTERM};
-    const QList<int> errorSignals = {SIGILL, SIGBUS, SIGFPE, SIGSEGV};
-    const QList<int> alarmSignals = {SIGALRM, SIGVTALRM, SIGPROF};
-    const QList<int> ignoreSignals = {SIGUSR1, SIGUSR2, SIGPIPE};
 #ifdef Q_OS_WIN
-    for (int sig: closeSignals)
-        if (signal(sig, SignalReceived) == SIG_IGN)
-            signal(sig, SIG_IGN);
+    AssignSignalHandler(closeSignals, CloseProgramSignalReceived);
+    AssignSignalHandler(errorSignals, ErrorSignalReceived);
+    AssignSignalHandler(alarmSignals, AlarmSignalReceived);
+    AssignSignalHandler(ignoreSignals, SIG_IGN);
 #else
     struct sigaction closeHandler, errorHandler, alarmHandler, ignoreHandler, oldHandler;
     InitializeAndAssignHandler(&closeHandler, closeSignals, CloseProgramSignalReceived, &oldHandler);
@@ -24,7 +21,15 @@ SignalHandler::SignalHandler() {
 #endif
 }
 
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_WIN
+
+void SignalHandler::AssignSignalHandler(const QList<int> &sysSignals, void (*action)(int)) {
+    for (int sysSignal: sysSignals)
+        if (signal(sysSignal, action) == SIG_IGN && action != SIG_IGN)
+            signal(sysSignal, SIG_IGN);
+}
+
+#else
 
 void SignalHandler::InitializeAndAssignHandler(struct sigaction *handler, const QList<int> &sysSignals, void (*action)(int), struct sigaction *oldHandler) {
     handler->sa_handler = action;
