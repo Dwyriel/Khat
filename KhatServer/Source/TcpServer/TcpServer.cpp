@@ -7,14 +7,16 @@ TcpServer::TcpServer(QObject *parent, quint16 port) : QObject(parent), qTcpServe
 }
 
 TcpServer::~TcpServer() {
-    qInfo("Notifying Clients...");
-    while (!sockets.empty()) {
-        auto *tcpClient = sockets.take(sockets.lastKey());
-        tcpClient->disconnect();
-        tcpClient->close();
-        tcpClient->deleteLater();
+    if (!sockets.empty()) {
+        qInfo("Notifying Clients...");
+        while (!sockets.empty()) {
+            auto *tcpClient = sockets.take(sockets.lastKey());
+            tcpClient->disconnect();
+            tcpClient->close();
+            tcpClient->deleteLater();
+        }
+        qInfo("Done");
     }
-    qInfo("Done");
     qInfo("Closing Server...");
     qTcpServer->close();
     delete qTcpServer;
