@@ -15,6 +15,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Concurrent)
 
 set(PROJECT_SOURCES
         main.cpp
+        Source/SignalHandler/SignalHandler.cpp
+        Source/SignalHandler/SignalHandler.h
         Source/TcpServer/TcpServer.cpp
         Source/TcpServer/TcpServer.h)
 
