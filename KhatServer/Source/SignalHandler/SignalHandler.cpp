@@ -10,7 +10,8 @@ SignalHandler::SignalHandler() {
     const int closeSignals[] = {SIGHUP, SIGINT, SIGQUIT, SIGABRT, SIGTERM};
 #ifdef Q_OS_WIN
     for (int sig: closeSignals)
-        signal(sig, SignalReceived);
+        if (signal(sig, SignalReceived) == SIG_IGN)
+            signal(sig, SIG_IGN);
 #else
     struct sigaction handler, old_handler;
     handler.sa_handler = SignalReceived;
