@@ -6,21 +6,19 @@
 #include <QObject>
 #include <csignal>
 
-const QList<int> closeSignals = {SIGHUP, SIGINT, SIGQUIT, SIGABRT, SIGTERM};
-const QList<int> errorSignals = {SIGILL, SIGBUS, SIGFPE, SIGSEGV};
-const QList<int> alarmSignals = {SIGALRM, SIGVTALRM, SIGPROF};
-const QList<int> ignoreSignals = {SIGUSR1, SIGUSR2, SIGPIPE};
-
 class SignalHandler : public QObject {
 Q_OBJECT
 
 public:
+
     static SignalHandler *instance();
 
 private:
     static SignalHandler *signalHandler;
 
     SignalHandler();
+
+    static void GenerateIgnoreSignalsList(QList<int> &ignoreSignals);
 
 #ifdef Q_OS_WIN
 
@@ -40,13 +38,17 @@ private:
 
     static void AlarmSignalReceived(int signal);
 
+    static void OtherSignalReceived(int signal);
+
 signals:
 
-    void CloseProgram(int exitCode);
+    void CloseProgram(int exitCode = 0);
 
     void Error(int signalCode);
 
-    void AlarmTimeout();
+    void AlarmTimeout(int signalCode);
+
+    void OtherSignal(int signalCode);
 };
 
 #endif //KHAT_SIGNALHANDLER_H
