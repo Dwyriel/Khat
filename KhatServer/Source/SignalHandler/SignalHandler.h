@@ -2,6 +2,7 @@
 #define KHAT_SIGNALHANDLER_H
 
 #include <QCoreApplication>
+#include <QtGlobal>
 #include <QObject>
 #include <csignal>
 

@@ -7,11 +7,21 @@ SignalHandler *SignalHandler::instance() {
 SignalHandler *SignalHandler::signalHandler = new SignalHandler();
 
 SignalHandler::SignalHandler() {
-    signal(SIGHUP, SignalReceived);
-    signal(SIGINT, SignalReceived);
-    signal(SIGQUIT, SignalReceived);
-    signal(SIGABRT, SignalReceived);
-    signal(SIGTERM, SignalReceived);
+    const int closeSignals[] = {SIGHUP, SIGINT, SIGQUIT, SIGABRT, SIGTERM};
+#ifdef Q_OS_WIN
+    for (int sig: closeSignals)
+        signal(sig, SignalReceived);
+#else
+    struct sigaction handler, old_handler;
+    handler.sa_handler = SignalReceived;
+    sigemptyset(&handler.sa_mask);
+    handler.sa_flags = 0;
+    for (int signal: closeSignals) {
+        sigaction(signal, NULL, &old_handler);
+        if (old_handler.sa_handler != SIG_IGN)
+            sigaction(signal, &handler, NULL);
+    }
+#endif
 }
 
 void SignalHandler::SignalReceived(int signal) {
