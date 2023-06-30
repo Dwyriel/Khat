@@ -1,6 +1,9 @@
 #ifndef KHAT_DEFINITIONS_H
 #define KHAT_DEFINITIONS_H
 
+/*Macros*/
+#define DISCARD(x) (void)x
+
 /*Shared Stuff*/
 #define LOGS_DIR_NAME "Logs"
 #define DATE_FORMAT "yyyy.MM.dd-hh:mm:ss"
