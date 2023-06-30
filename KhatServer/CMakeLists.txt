@@ -22,8 +22,17 @@ set(PROJECT_SOURCES
 
 add_executable(KhatServer ${PROJECT_SOURCES})
 
-target_include_directories(KhatServer PRIVATE "../SharedFiles")
-target_link_libraries(KhatServer Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent)
+IF (CMAKE_BUILD_TYPE MATCHES Debug)
+    set_target_properties(KhatServer PROPERTIES BUILD_RPATH_USE_ORIGIN TRUE)
+ELSE ()
+    set_target_properties(KhatServer PROPERTIES
+            BUILD_WITH_INSTALL_RPATH TRUE
+            LINK_FLAGS "-Wl,-rpath,$ORIGIN/")
+ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
+
+target_include_directories(KhatServer PRIVATE "../SharedFiles" "../KtLogger")
+
+target_link_libraries(KhatServer KtLogger Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent)
 
 install(TARGETS KhatServer
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
