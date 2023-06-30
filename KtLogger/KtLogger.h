@@ -6,6 +6,8 @@
 #include <QCoreApplication>
 #include <QtLogging>
 #include <QString>
+#include <QDir>
+#include <QFile>
 #include <QDateTime>
 
 class KtLogger {
@@ -19,21 +21,25 @@ public:
     static bool saveToFile;
 
     static void MessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+    static QString BytesToHexRepresentation(char *bytes, int size);
+
 private:
+    static QFile file;
+
     static inline QString getFormattedCurrentTime();
 
     static inline char getMessageTypeCharacter(QtMsgType type);
 
     static inline QString generateMessage(const QString &msg, QtMsgType type);
 
-    static inline void writeMessageToConsole(const QStringView &msg);
+    static inline void writeMessageToConsole(const QString &msg);
 
     static inline void writeMessageToFile(const QStringView &msg);
-};
 
-class Logger : QObject {
-Q_OBJECT
-
+    struct _internalStruct{
+        _internalStruct();
+    };
 };
 
 #endif //KTLOGGER_LIBRARY_H
