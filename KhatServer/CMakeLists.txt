@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(KhatServer VERSION 0.1 LANGUAGES CXX)
+project(KhatServer VERSION 0.1.0 LANGUAGES CXX)
+configure_file(../SharedFiles/cmake_config.h.in cmake_config.h)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
@@ -30,7 +31,7 @@ ELSE ()
             LINK_FLAGS "-Wl,-rpath,$ORIGIN/")
 ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
 
-target_include_directories(KhatServer PRIVATE "../SharedFiles" "../KtLogger")
+target_include_directories(KhatServer PRIVATE "../SharedFiles" "../KtLogger" ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(KhatServer KtLogger Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent)
 
