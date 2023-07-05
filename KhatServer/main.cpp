@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
 #endif
     QCoreApplication a(argc, argv);
     qInstallMessageHandler(KtLogger::MessageHandler);
+    qInfo("%s version %s", PROJECT_NAME, PROJECT_VER);
     QObject::connect(SignalHandler::instance(), &SignalHandler::CloseProgram, QCoreApplication::exit);
     TcpServer tcpServer;
     return QCoreApplication::exec();
