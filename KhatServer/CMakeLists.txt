@@ -32,9 +32,9 @@ ELSE ()
             LINK_FLAGS "-Wl,-rpath,$ORIGIN/")
 ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
 
-target_include_directories(KhatServer PRIVATE "../SharedFiles" "../KtLogger" ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(KhatServer PRIVATE "../SharedFiles" "../KtLogger" "../Submodules/DArgumentParser" ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(KhatServer KtLogger Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent)
+target_link_libraries(KhatServer KtLogger DArgumentParser Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Concurrent)
 
 configure_file(../SharedFiles/cmake_config.h.in cmake_config.h)
 
