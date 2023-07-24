@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(KtLogger VERSION 0.1 LANGUAGES CXX)
+project(KtLogger VERSION 0.2.0 LANGUAGES CXX)
+configure_file(../SharedFiles/cmake_config.h.in cmake_config.h)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,5 +20,5 @@ set(PROJECT_SOURCES
 
 add_library(KtLogger SHARED ${PROJECT_SOURCES})
 
-target_include_directories(KtLogger PRIVATE "../SharedFiles")
+target_include_directories(KtLogger PRIVATE "../SharedFiles" ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(KtLogger Qt${QT_VERSION_MAJOR}::Core)
