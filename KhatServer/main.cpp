@@ -48,10 +48,10 @@ int main(int argc, char *argv[]) {
 #if DEBUG_BUILD
     KtLogger::saveToFile = false;
 #endif
-    auto [port, limit] = parseArgs(argc, argv); //todo use values
+    auto [port, limit] = parseArgs(argc, argv);
     QCoreApplication a(argc, argv);
     qInstallMessageHandler(KtLogger::MessageHandler);
     QObject::connect(SignalHandler::instance(), &SignalHandler::CloseProgram, QCoreApplication::exit);
-    TcpServer tcpServer;
+    TcpServer tcpServer(nullptr, port, limit);
     return QCoreApplication::exec();
 }

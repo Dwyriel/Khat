@@ -14,11 +14,12 @@ class TcpServer : public QObject {
 Q_OBJECT
 
 public:
-    explicit TcpServer(QObject *parent = nullptr, quint16 port = SERVER_DEFAULT_PORT);
+    explicit TcpServer(QObject *parent, quint16 port, quint64 limit);
 
     ~TcpServer() override;
 
 private:
+    quint64 connectionLimit;
     QTcpServer *qTcpServer;
     QMap<QUuid, QTcpSocket *> sockets;
 
