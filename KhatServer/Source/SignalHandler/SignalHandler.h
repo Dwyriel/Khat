@@ -30,7 +30,7 @@ private:
 
 #endif
 
-    static void PrintDebugMessage(int signal);
+    static QString GenerateSignalMessage(int signal);
 
     static void CloseProgramSignalReceived(int signal);
 

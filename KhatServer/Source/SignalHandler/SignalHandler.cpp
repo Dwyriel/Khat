@@ -71,27 +71,26 @@ void SignalHandler::InitializeAndAssignHandler(struct sigaction *handler, const 
 
 #endif
 
-void SignalHandler::PrintDebugMessage(int signal) {
-    QString signalName = signal < 32 ? QString("SIG%1(%2)").arg(sigabbrev_np(signal)).arg(signal) : QString("SIGRTMIN+%1(%2)").arg(QString::number(signal - SIGRTMIN)).arg(signal);
-    qDebug("%s signal received. (%s)", signal < 32 ? sigdescr_np(signal) : "Real time", qUtf8Printable(signalName));
+QString SignalHandler::GenerateSignalMessage(int signal) {
+    return signal < 32 ? QString("%1 signal received. (SIG%2(%3))").arg(sigdescr_np(signal), sigabbrev_np(signal)).arg(signal) : QString("Real time signal received. (SIGRTMIN+%1(%2))").arg(signal - SIGRTMIN).arg(signal);
 }
 
 void SignalHandler::CloseProgramSignalReceived(int signal) {
-    PrintDebugMessage(signal);
+    qInfo("%s", GenerateSignalMessage(signal).toUtf8().constData());
     emit instance()->CloseProgram();
 }
 
 void SignalHandler::ErrorSignalReceived(int signal) {
-    PrintDebugMessage(signal);
+    qCritical("%s", GenerateSignalMessage(signal).toUtf8().constData());
     emit instance()->Error(signal);
 }
 
 void SignalHandler::AlarmSignalReceived(int signal) {
-    PrintDebugMessage(signal);
+    qInfo("%s", GenerateSignalMessage(signal).toUtf8().constData());
     emit instance()->AlarmTimeout(signal);
 }
 
 void SignalHandler::OtherSignalReceived(int signal) {
-    PrintDebugMessage(signal);
+    qInfo("%s", GenerateSignalMessage(signal).toUtf8().constData());
     emit instance()->OtherSignal(signal);
 }
