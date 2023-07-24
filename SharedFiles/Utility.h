@@ -13,6 +13,8 @@ std::enable_if_t<std::is_integral_v<T>, T> convertToUnsignedInteger(const std::s
         return 0;
     char *lastReadChar;
     uint64_t conversion = strtoull(string.c_str(), &lastReadChar, 10);
+    if(conversion == ULLONG_MAX && errno == ERANGE)
+        return 0;
     if (*lastReadChar != '\0')
         return 0;
     if (conversion > maxValueAllowed)

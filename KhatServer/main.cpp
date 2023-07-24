@@ -37,7 +37,7 @@ std::tuple<int, int> parseArgs(int argc, char **argv) {
     if (connectionLimitOption.WasSet()) {
         limit = convertToUnsignedInteger<uint64_t>(connectionLimitOption.GetValue(), UINT64_MAX);
         if (limit < 1) {
-            qCritical("Invalid value passed to option \"limit\".\nValue should be a positive integer number.");
+            qCritical("Invalid value passed to option \"limit\".\nValue should be an integer number between 1 and 18446744073709551615.");
             exit(EXIT_FAILURE);
         }
     }
