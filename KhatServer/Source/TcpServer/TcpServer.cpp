@@ -1,9 +1,9 @@
 #include "TcpServer.h"
 
-TcpServer::TcpServer(QObject *parent, quint16 port) : QObject(parent), qTcpServer(new QTcpServer(this)) {
+TcpServer::TcpServer(QObject *parent, quint16 port, quint64 limit) : QObject(parent), qTcpServer(new QTcpServer(this)), connectionLimit(limit) {
     connectSignals();
     qInfo("Creating Server on port %d.", port);
-    qTcpServer->listen(QHostAddress::Any, port);
+    qTcpServer->listen(QHostAddress::Any, port ? port : SERVER_DEFAULT_PORT);
 }
 
 TcpServer::~TcpServer() {
