@@ -4,6 +4,8 @@ TcpServer::TcpServer(QObject *parent, quint16 port, quint64 limit) : QObject(par
     connectSignals();
     port = port ? port : SERVER_DEFAULT_PORT;
     qInfo("Creating Server on port %d.", port);
+    if (port > 49151)
+        qWarning("Ports from 49152 to 65535 are reserved to clients. They can still be used for servers but it's not recommended.");
     qTcpServer->listen(QHostAddress::Any, port);
 }
 
