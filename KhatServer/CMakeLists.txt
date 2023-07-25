@@ -38,8 +38,6 @@ target_link_libraries(KhatServer KtLogger DArgumentParser Qt${QT_VERSION_MAJOR}:
 
 configure_file(../SharedFiles/cmake_config.h.in cmake_config.h)
 
-configure_file(../SharedFiles/cmake_config.h.in cmake_config.h)
-
 install(TARGETS KhatServer
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
