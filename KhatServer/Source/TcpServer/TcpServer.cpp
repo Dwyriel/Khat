@@ -2,8 +2,9 @@
 
 TcpServer::TcpServer(QObject *parent, quint16 port, quint64 limit) : QObject(parent), qTcpServer(new QTcpServer(this)), connectionLimit(limit) {
     connectSignals();
+    port = port ? port : SERVER_DEFAULT_PORT;
     qInfo("Creating Server on port %d.", port);
-    qTcpServer->listen(QHostAddress::Any, port ? port : SERVER_DEFAULT_PORT);
+    qTcpServer->listen(QHostAddress::Any, port);
 }
 
 TcpServer::~TcpServer() {
@@ -44,7 +45,9 @@ void TcpServer::newPendingConnection() {
     connect(socket, &QTcpSocket::disconnected, [this, uuid] { socketDisconnected(uuid); });
     connect(socket, &QTcpSocket::readyRead, [this, uuid] { socketSentMessage(uuid); });
     qInfo("Client was assigned the UUID of %s and added to the client list.", qUtf8Printable(uuid.toString()));
-    qInfo("Peer Info:\n  Address: %s\n  Port: %d", qUtf8Printable(socket->peerAddress().toString()), socket->peerPort());
+    qInfo("Peer Info:");
+    qInfo("  Address: %s", qUtf8Printable(socket->peerAddress().toString()));
+    qInfo("  Port: %d", socket->peerPort());
 }
 
 void TcpServer::socketDisconnected(const QUuid &uuid) {
