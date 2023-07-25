@@ -2,6 +2,7 @@
 #define KHAT_UTILITY_H
 
 #include <cstdint>
+#include <climits>
 #include <string>
 
 /**
